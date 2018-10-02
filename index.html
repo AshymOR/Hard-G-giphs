@@ -46,7 +46,7 @@ var topics = ["World of Warcraft", "Heroes of the Storm", "Destiny 2", "Diablo 3
 
 
 
-function renderButtons() {
+function createBtn() {
 
     $("#btnLocation").empty()
 
@@ -70,8 +70,6 @@ function renderButtons() {
 
  $(document).on("click", "#add-gameEntry", function(event) {
 
-
-
      event.preventDefault();
 
      var game = $("#gameEntry").val().trim();
@@ -80,7 +78,7 @@ function renderButtons() {
 
      console.log(game)
 
-     renderButtons();
+     createBtn();
 
  
 
@@ -88,7 +86,7 @@ function renderButtons() {
 
 
 
-     renderButtons();
+     createBtn();
 
 
 $(document).on("click", "button", function() {
