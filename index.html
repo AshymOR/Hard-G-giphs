@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Gif</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="Assests/style.css">
+
+
+
+</head>
+
+<body>
+
+
+
+<h1>The Magical Gif (with a hard G) Creator</h1>
+
+<h2>Click a button to get gifs of a game or add a game of your own.</h2>
+
+<div id="btnLocation"></div>
+
+<form><span id= "textBox">Add your game <input id="gameEntry" type="text" ><input id="add-gameEntry" value="Submit" type="submit"></span></span></form>
+
+<div id="gifLocation"></div>
+
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+
+
+var topics = ["World of Warcraft", "Heroes of the Storm", "Destiny 2", "Diablo 3", "Xenoblade", "Monster Hunter", "Overwatch", "Hearthstone"]
+
+
+
+function renderButtons() {
+
+    $("#btnLocation").empty()
+
+    for (var i = 0; i < topics.length; i++) {     
+
+        var btn = $("<button>");
+
+        btn.addClass("game");
+
+        btn.attr("data-game", topics[i]);
+
+        btn.text(topics[i]);
+
+        $("#btnLocation").append(btn);
+
+
+
+}}
+
+
+
+ $(document).on("click", "#add-gameEntry", function(event) {
+
+
+
+     event.preventDefault();
+
+     var game = $("#gameEntry").val().trim();
+
+     topics.push(game);
+
+     console.log(game)
+
+     renderButtons();
+
+ 
+
+ })
+
+
+
+     renderButtons();
+
+
+$(document).on("click", "button", function() {
+
+    var game = $(this).attr("data-game");
+
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+
+        game + "&api_key=dc6zaTOxFJmzC&limit=10";
+
+    
+     $.ajax({
+
+        url: queryURL,
+
+        method: "GET"
+
+      })
+
+
+
+    .then(function(response) {
+
+          console.log(queryURL);
+
+          console.log(response);
+
+          var results = response.data;
+
+
+
+          for (var i = 0; i < results.length; i++) {
+
+
+
+            var gameDiv = $("<div>");
+
+            var p = $("<p>").text("Rating: " + results[i].rating);
+
+            var gameImage = $("<img>");
+
+            
+
+
+
+            gameImage.attr("src", results[i].images.fixed_height.url);
+
+            gameImage.attr("data-still", results[i].images.fixed_height_still.url)
+
+            gameImage.attr("data-animate", results[i].images.fixed_height.url)
+
+            gameImage.attr("data-state = animate")
+
+            gameImage.addClass("gif")
+
+            gameDiv.append(p);
+
+            gameDiv.append(gameImage);
+
+
+
+        
+
+
+
+        $("#gifLocation").prepend(gameDiv);
+
+            
+
+        }
+
+
+
+    })
+
+
+
+    })
+
+
+
+    $(document).on("click", '.gif', function() {
+
+    
+
+    var state = $(this).attr("data-state");
+
+
+
+    if (state === "still") {
+
+        $(this).attr("src", $(this).attr("data-animate"));
+
+        $(this).attr("data-state", "animate");
+
+    } else {
+
+        $(this).attr("src", $(this).attr("data-still"));
+
+        $(this).attr("data-state", "still");
+
+    }
+
+});
+
+</script>
+
+</body>
+
+</html>
